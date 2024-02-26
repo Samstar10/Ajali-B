@@ -34,3 +34,33 @@ class User(db.Model, SerializerMixin):
     
     def __repr__(self):
         return f'<User {self.username}>'
+    
+class IncidentReport(db.Model, SerializerMixin):
+    __tablename__ = 'incident_reports'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String, nullable=False, default='pending')
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    media_attachments = db.relationship('MediaAttachment', backref='incident_report', lazy=True)
+
+    def __repr__(self):
+        return f'<IncidentReport {self.title}>'
+    
+class MediaAttachment(db.Model, SerializerMixin):
+    __tablename__ = 'media_attachments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    file_url = db.Column(db.String, nullable=False)
+    incident_report_id = db.Column(db.Integer, db.ForeignKey('incident_reports.id'), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
+
+    def __repr__(self):
+        return f'<MediaAttachment {self.url}>'
