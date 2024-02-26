@@ -82,9 +82,57 @@ class Login(Resource):
             'email': user.email
         }, 200
 
+class IncidentReportResource(Resource):
+    @jwt_required()
+    def post(self):
+        data = request.get_json()
+        title = data.get('title')
+        description = data.get('description')
+        location = data.get('location')
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        user_id = get_jwt_identity()
+
+        if not title or not description or not location or not latitude or not longitude:
+            return {'message': 'Title, description, location, latitude, and longitude are required'}, 400
+
+        try:
+            incident_report = IncidentReport(title=title, description=description, location=location, latitude=latitude, longitude=longitude, user_id=user_id)
+            db.session.add(incident_report)
+            db.session.commit()
+        except IntegrityError:
+            return {'message': 'Incident report already exists'}, 400
+
+        return {
+            'message': 'Incident report created successfully',
+            'id': incident_report.id,
+            'title': incident_report.title,
+            'description': incident_report.description,
+            'location': incident_report.location,
+            'latitude': incident_report.latitude,
+            'longitude': incident_report.longitude,
+            'status': incident_report.status
+        }, 201
+    
+    @jwt_required()
+    def get(self):
+        user_id = get_jwt_identity()
+        incident_reports = IncidentReport.query.filter_by(user_id=user_id).all()
+        return {
+            'incident_reports': [{
+                'id': incident_report.id,
+                'title': incident_report.title,
+                'description': incident_report.description,
+                'location': incident_report.location,
+                'latitude': incident_report.latitude,
+                'longitude': incident_report.longitude,
+                'status': incident_report.status
+            } for incident_report in incident_reports]
+        }, 200
 
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
+api.add_resource(IncidentReportResource, '/incidents')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
