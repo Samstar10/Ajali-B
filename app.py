@@ -149,11 +149,10 @@ class IncidentByID(Resource):
     
     @jwt_required()
     def patch(self, id):
-        user_id = get_jwt_identity()
         data = request.get_json()
         status = data.get('status')
 
-        incident_report = IncidentReport.query.filter_by(id=id, user_id=user_id).first()
+        incident_report = IncidentReport.query.filter_by(id=id).first()
 
         if not incident_report:
             return {'message': 'Incident report not found'}, 404
@@ -170,10 +169,21 @@ class IncidentByID(Resource):
             'longitude': incident_report.longitude,
             'status': incident_report.status
         }, 200
+    
+    @jwt_required()
+    def delete(self, id):
+        user_id = get_jwt_identity()
+        incident_report = IncidentReport.query.filter_by(id=id, user_id=user_id).first()
+        if not incident_report:
+            return {'message': 'Incident report not found'}, 404
+        db.session.delete(incident_report)
+        db.session.commit()
+        return {'message': 'Incident report deleted successfully'}, 200
 
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(IncidentReportResource, '/incidents')
+api.add_resource(IncidentByID, '/incidents/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
