@@ -179,6 +179,21 @@ class IncidentByID(Resource):
         db.session.delete(incident_report)
         db.session.commit()
         return {'message': 'Incident report deleted successfully'}, 200
+    
+class AllIncidents(Resource):
+    def get(self):
+        incident_reports = IncidentReport.query.all()
+        return {
+            'incident_reports': [{
+                'id': incident_report.id,
+                'title': incident_report.title,
+                'description': incident_report.description,
+                'location': incident_report.location,
+                'latitude': incident_report.latitude,
+                'longitude': incident_report.longitude,
+                'status': incident_report.status
+            } for incident_report in incident_reports]
+        }, 200
 
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
