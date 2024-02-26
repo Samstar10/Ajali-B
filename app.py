@@ -1,11 +1,16 @@
-from flask import request, session
-from flask_restful import Resource
+from flask import request, session, jsonify
+from flask_restful import Resource, reqparse
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
+from cloudinary.uploader import upload
+from werkzeug.datastructures import FileStorage
 
 from config import app, db, api
 from models import User, IncidentReport, MediaAttachment
+
+parser = reqparse.RequestParser()
+parser.add_argument('file', type=FileStorage, location='files')
 
 @app.route('/')
 def index():
@@ -194,11 +199,34 @@ class AllIncidents(Resource):
                 'status': incident_report.status
             } for incident_report in incident_reports]
         }, 200
+    
+class MediaUpload(Resource):
+    @jwt_required()
+    def post(self, incident_id):
+        args = parser.parse_args()
+        uploaded_file = args['file']
+
+        if uploaded_file:
+            result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
+            file_url = result.get('secure_url')
+
+            new_media = MediaAttachment(file_url=file_url, incident_report_id=incident_id)
+            db.session.add(new_media)
+            db.session.commit()
+
+            return {
+                'message': 'File uploaded successfully',
+                'file_url': file_url
+            }, 201
+        
+        return {'message': 'No file uploaded'}, 400
 
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(IncidentReportResource, '/incidents')
 api.add_resource(IncidentByID, '/incidents/<int:id>')
+api.add_resource(AllIncidents, '/all_incidents')
+api.add_resource(MediaUpload, '/incidents/<int:incident_id>/media')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
