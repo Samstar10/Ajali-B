@@ -130,12 +130,30 @@ class IncidentReportResource(Resource):
             } for incident_report in incident_reports]
         }, 200
 
+class IncidentByID(Resource):
+    @jwt_required()
+    def get(self, incident_id):
+        user_id = get_jwt_identity()
+        incident_report = IncidentReport.query.filter_by(id=incident_id, user_id=user_id).first()
+        if not incident_report:
+            return {'message': 'Incident report not found'}, 404
+        return {
+            'id': incident_report.id,
+            'title': incident_report.title,
+            'description': incident_report.description,
+            'location': incident_report.location,
+            'latitude': incident_report.latitude,
+            'longitude': incident_report.longitude,
+            'status': incident_report.status
+        }, 200
+    
     @jwt_required()
     def patch(self, id):
+        user_id = get_jwt_identity()
         data = request.get_json()
         status = data.get('status')
 
-        incident_report = IncidentReport.query.filter_by(id=id).first()
+        incident_report = IncidentReport.query.filter_by(id=id, user_id=user_id).first()
 
         if not incident_report:
             return {'message': 'Incident report not found'}, 404
