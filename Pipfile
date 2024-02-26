@@ -15,6 +15,7 @@ importlib-metadata = "*"
 importlib-resources = "*"
 pytest = "*"
 flask-bcrypt = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
