@@ -23,7 +23,7 @@ class Signup(Resource):
 
         try:
             user = User(username=username, email=email)
-            user._password_hash = password
+            user._password_hash = generate_password_hash(password)
             db.session.add(user)
             db.session.commit()
         except IntegrityError:
@@ -36,6 +36,14 @@ class Signup(Resource):
             'username': user.username,
             'email': user.email
         }, 201
+    
+    def patch(self):
+        pass
+        
+    
+class Login(Resource):
+    pass
+
 
 api.add_resource(Signup, '/signup')
 
