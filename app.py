@@ -61,10 +61,30 @@ class Signup(Resource):
         
     
 class Login(Resource):
-    pass
+    def post(self):
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+
+        if not username or not password:
+            return {'message': 'Username and password are required'}, 400
+
+        user = User.query.filter_by(username=username).first()
+
+        if not user or not check_password_hash(user._password_hash, password):
+            return {'message': 'Invalid username or password'}, 401
+
+        access_token = create_access_token(identity=user.id)
+        return {
+            'access_token': access_token,
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }, 200
 
 
 api.add_resource(Signup, '/signup')
+api.add_resource(Login, '/login')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
