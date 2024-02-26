@@ -1,6 +1,7 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.schema import CheckConstraint
+from sqlalchemy import Enum
 
 from config import db, bcrypt
 
@@ -42,9 +43,9 @@ class IncidentReport(db.Model, SerializerMixin):
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.Text, nullable=False)
     location = db.Column(db.String, nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String, nullable=False, default='pending')
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    status = db.Column(Enum('pending', 'resolved', 'rejected', name='status'), nullable=False, default='pending')
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

@@ -17,6 +17,7 @@ pytest = "*"
 flask-bcrypt = "*"
 psycopg2-binary = "*"
 flask-jwt-extended = "*"
+cloudinary = "*"
 
 [dev-packages]
 
