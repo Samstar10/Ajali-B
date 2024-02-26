@@ -1,8 +1,8 @@
 from flask import request, session
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import create_access_token
-from werkzeug.security import generate_password_hash
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from config import app, db, api
 from models import User, IncidentReport, MediaAttachment
@@ -37,8 +37,27 @@ class Signup(Resource):
             'email': user.email
         }, 201
     
+    @jwt_required()
     def patch(self):
-        pass
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(username=current_user).first()
+
+        if not user:
+            return {'message': 'User not found'}, 404
+        
+        data = request.get_json()
+        password = data.get('password')
+        if not password:
+            return {'message': 'Password is required'}, 400
+
+        user._password_hash = generate_password_hash(password)
+        db.session.commit()
+        return {
+            'message': 'Password updated successfully',
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }, 200
         
     
 class Login(Resource):
