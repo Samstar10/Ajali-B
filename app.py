@@ -135,6 +135,20 @@ class IncidentReportResource(Resource):
             } for incident_report in incident_reports]
         }, 200
 
+
+class Users(Resource):
+    # @jwt_required()
+    def get(self):
+        users = User.query.all()
+        return {
+            'users': [{
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'role': user.role
+            } for user in users]
+        }, 200
+
 class IncidentByID(Resource):
     @jwt_required()
     def get(self, incident_id):
