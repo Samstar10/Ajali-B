@@ -241,6 +241,7 @@ api.add_resource(IncidentReportResource, '/incidents')
 api.add_resource(IncidentByID, '/incidents/<int:id>')
 api.add_resource(AllIncidents, '/all_incidents')
 api.add_resource(MediaUpload, '/incidents/<int:incident_id>/media')
+api.add_resource(Users, '/users')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
