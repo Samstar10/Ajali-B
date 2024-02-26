@@ -130,6 +130,29 @@ class IncidentReportResource(Resource):
             } for incident_report in incident_reports]
         }, 200
 
+    @jwt_required()
+    def patch(self, id):
+        data = request.get_json()
+        status = data.get('status')
+
+        incident_report = IncidentReport.query.filter_by(id=id).first()
+
+        if not incident_report:
+            return {'message': 'Incident report not found'}, 404
+
+        incident_report.status = status
+        db.session.commit()
+        return {
+            'message': 'Incident report updated successfully',
+            'id': incident_report.id,
+            'title': incident_report.title,
+            'description': incident_report.description,
+            'location': incident_report.location,
+            'latitude': incident_report.latitude,
+            'longitude': incident_report.longitude,
+            'status': incident_report.status
+        }, 200
+
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(IncidentReportResource, '/incidents')
