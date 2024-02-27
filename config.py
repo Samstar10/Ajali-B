@@ -15,17 +15,17 @@ load_dotenv()
 
 
 cloudinary.config(
-    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    api_key = os.environ.get('CLOUDINARY_API_KEY'),
-    api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+    cloud_name = 'ddorazyav',
+    api_key = '265828958461461',
+    api_secret = '_74ohm_8Mv7Z2eXUPJPKhIUpjHI'
 )
 
 app = Flask(__name__)
-# app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
+app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ajali_backend_user:X0BxW1hUyJH1K3zCtRm7iSy0df9GytUu@dpg-cnendtgl5elc73dc7mp0-a.oregon-postgres.render.com/ajali_backend'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
-app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+app.config['JWT_SECRET_KEY'] = 'super-secret'
 
 jwt = JWTManager(app)
 
