@@ -21,6 +21,7 @@ class Signup(Resource):
         data = request.get_json()
         username = data.get('username')
         email = data.get('email')
+        role = data.get('role')
         password = data.get('password')
 
         if not username or not email or not password:
@@ -39,7 +40,8 @@ class Signup(Resource):
             'access_token': access_token,
             'id': user.id,
             'username': user.username,
-            'email': user.email
+            'email': user.email,
+            'role': user.role
         }, 201
     
     @jwt_required()
