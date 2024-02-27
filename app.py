@@ -28,7 +28,7 @@ class Signup(Resource):
             return {'message': 'Username, email and password are required'}, 400
 
         try:
-            user = User(username=username, email=email)
+            user = User(username=username, email=email, role=role)
             user._password_hash = generate_password_hash(password)
             db.session.add(user)
             db.session.commit()
