@@ -119,7 +119,13 @@ class IncidentReportResource(Resource):
             'location': incident_report.location,
             'latitude': incident_report.latitude,
             'longitude': incident_report.longitude,
-            'status': incident_report.status
+            'status': incident_report.status,
+            'media_attachments': [
+                {
+                    'id': media_attachment.id,
+                    'file_url': media_attachment.file_url
+                } for media_attachment in incident_report.media_attachments
+            ]
         }, 201
     
     @jwt_required()
@@ -134,7 +140,13 @@ class IncidentReportResource(Resource):
                 'location': incident_report.location,
                 'latitude': incident_report.latitude,
                 'longitude': incident_report.longitude,
-                'status': incident_report.status
+                'status': incident_report.status,
+                'media_attachments': [
+                    {
+                        'id': media_attachment.id,
+                        'file_url': media_attachment.file_url
+                    } for media_attachment in incident_report.media_attachments
+                ]
             } for incident_report in incident_reports]
         }, 200
 
@@ -166,7 +178,13 @@ class IncidentByID(Resource):
             'location': incident_report.location,
             'latitude': incident_report.latitude,
             'longitude': incident_report.longitude,
-            'status': incident_report.status
+            'status': incident_report.status,
+            'media_attachments': [
+                {
+                    'id': media_attachment.id,
+                    'file_url': media_attachment.file_url
+                } for media_attachment in incident_report.media_attachments
+            ]
         }, 200
     
     @jwt_required()
@@ -189,7 +207,13 @@ class IncidentByID(Resource):
             'location': incident_report.location,
             'latitude': incident_report.latitude,
             'longitude': incident_report.longitude,
-            'status': incident_report.status
+            'status': incident_report.status,
+            'media_attachments': [
+                {
+                    'id': media_attachment.id,
+                    'file_url': media_attachment.file_url
+                } for media_attachment in incident_report.media_attachments
+            ]
         }, 200
     
     @jwt_required()
@@ -213,7 +237,13 @@ class AllIncidents(Resource):
                 'location': incident_report.location,
                 'latitude': incident_report.latitude,
                 'longitude': incident_report.longitude,
-                'status': incident_report.status
+                'status': incident_report.status,
+                'media_attachments': [
+                    {
+                        'id': media_attachment.id,
+                        'file_url': media_attachment.file_url
+                    } for media_attachment in incident_report.media_attachments
+                ]
             } for incident_report in incident_reports]
         }, 200
     
