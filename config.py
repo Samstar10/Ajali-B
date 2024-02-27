@@ -22,7 +22,7 @@ cloudinary.config(
 
 app = Flask(__name__)
 # app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ajali:91015@localhost/ajali'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
