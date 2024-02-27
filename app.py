@@ -44,27 +44,27 @@ class Signup(Resource):
             'role': user.role
         }, 201
     
-    @jwt_required()
+
     def patch(self):
-        current_user = get_jwt_identity()
-        user = User.query.filter_by(username=current_user).first()
-
-        if not user:
-            return {'message': 'User not found'}, 404
-        
         data = request.get_json()
+        email = data.get('email')
         password = data.get('password')
-        if not password:
-            return {'message': 'Password is required'}, 400
 
+        if not email or not password:
+            return {'message': 'Email and password are required'}, 400
+
+        user = User.query.filter_by(email=email).first()
+        
         user._password_hash = generate_password_hash(password)
         db.session.commit()
+
         return {
             'message': 'Password updated successfully',
             'id': user.id,
             'username': user.username,
             'email': user.email
         }, 200
+        
         
     
 class Login(Resource):
