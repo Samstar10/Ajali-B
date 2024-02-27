@@ -1,8 +1,8 @@
-"""empty message
+"""Create tables
 
-Revision ID: 3859081d406c
+Revision ID: 9c01b2ae11fc
 Revises: 
-Create Date: 2024-02-26 20:51:13.093434
+Create Date: 2024-02-27 09:32:52.256391
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '3859081d406c'
+revision = '9c01b2ae11fc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,9 +36,9 @@ def upgrade():
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('description', sa.Text(), nullable=False),
     sa.Column('location', sa.String(), nullable=False),
-    sa.Column('latitude', sa.Float(), nullable=False),
-    sa.Column('longitude', sa.Float(), nullable=False),
-    sa.Column('status', sa.String(), nullable=False),
+    sa.Column('latitude', sa.Float(), nullable=True),
+    sa.Column('longitude', sa.Float(), nullable=True),
+    sa.Column('status', sa.Enum('pending', 'resolved', 'rejected', name='status'), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
