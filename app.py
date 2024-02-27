@@ -10,7 +10,7 @@ from config import app, db, api
 from models import User, IncidentReport, MediaAttachment
 
 parser = reqparse.RequestParser()
-parser.add_argument('file', type=FileStorage, location='files')
+parser.add_argument('files', type=FileStorage, location='files', action='append')
 
 @app.route('/')
 def index():
@@ -220,22 +220,47 @@ class MediaUpload(Resource):
     @jwt_required()
     def post(self, incident_id):
         args = parser.parse_args()
-        uploaded_file = args['file']
+        uploaded_files = args['files']
 
-        if uploaded_file:
-            result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
-            file_url = result.get('secure_url')
-
-            new_media = MediaAttachment(file_url=file_url, incident_report_id=incident_id)
-            db.session.add(new_media)
-            db.session.commit()
-
-            return {
-                'message': 'File uploaded successfully',
-                'file_url': file_url
-            }, 201
+        if not uploaded_files:
+            return {'message': 'No files uploaded'}, 400
         
-        return {'message': 'No file uploaded'}, 400
+        uploaded_urls = []
+
+        for uploaded_file in uploaded_files:
+            if uploaded_file:
+                result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
+                file_url = result.get('secure_url')
+                uploaded_urls.append(file_url)
+
+                new_media = MediaAttachment(file_url=file_url, incident_report_id=incident_id)
+                db.session.add(new_media)
+            
+        db.session.commit()
+
+        return {
+            'message': 'Files uploaded successfully',
+            'uploaded_urls': uploaded_urls
+        }, 201
+
+    # def post(self, incident_id):
+    #     args = parser.parse_args()
+    #     uploaded_file = args['file']
+
+    #     if uploaded_file:
+    #         result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
+    #         file_url = result.get('secure_url')
+
+    #         new_media = MediaAttachment(file_url=file_url, incident_report_id=incident_id)
+    #         db.session.add(new_media)
+    #         db.session.commit()
+
+    #         return {
+    #             'message': 'File uploaded successfully',
+    #             'file_url': file_url
+    #         }, 201
+        
+    #     return {'message': 'No file uploaded'}, 400
 
 
 class Logout(Resource):
