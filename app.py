@@ -220,15 +220,15 @@ class MediaUpload(Resource):
     @jwt_required()
     def post(self, incident_id):
         args = parser.parse_args()
-        uploaded_files = args['files']
+        uploaded_files = args.getlist('files')
 
         if not uploaded_files:
             return {'message': 'No files uploaded'}, 400
         
         uploaded_urls = []
 
-        for uploaded_file in uploaded_files:
-            if uploaded_file:
+        if uploaded_files:
+            for uploaded_file in uploaded_files:
                 result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
                 file_url = result.get('secure_url')
                 uploaded_urls.append(file_url)
