@@ -44,7 +44,6 @@ class Signup(Resource):
             'role': user.role
         }, 201
     
-    @jwt_required()
     def patch(self):
         current_user = get_jwt_identity()
         user = User.query.filter_by(username=current_user).first()
@@ -236,6 +235,14 @@ class MediaUpload(Resource):
             }, 201
         
         return {'message': 'No file uploaded'}, 400
+
+
+class Logout(Resource):
+    @jwt_required()
+    def delete(self):
+        pass
+
+        
 
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
