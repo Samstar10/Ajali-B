@@ -237,6 +237,14 @@ class MediaUpload(Resource):
         
         return {'message': 'No file uploaded'}, 400
 
+
+class Logout(Resource):
+    @jwt_required()
+    def delete(self):
+        pass
+
+        
+
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(IncidentReportResource, '/incidents')
