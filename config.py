@@ -1,3 +1,4 @@
+from datetime import timedelta
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
@@ -10,6 +11,7 @@ from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS
 
 load_dotenv()
 
@@ -26,6 +28,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ajali_backend_user:X0BxW1h
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 app.config['JWT_SECRET_KEY'] = 'super-secret'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
+
 
 jwt = JWTManager(app)
 
@@ -36,6 +40,7 @@ db = SQLAlchemy(metadata=metadata)
 
 migrate = Migrate(app, db)
 db.init_app(app)
+CORS(app)
 
 bcrypt = Bcrypt(app)
 

@@ -44,21 +44,19 @@ class Signup(Resource):
             'role': user.role
         }, 201
     
-    @jwt_required()
     def patch(self):
-        current_user = get_jwt_identity()
-        user = User.query.filter_by(username=current_user).first()
-
-        if not user:
-            return {'message': 'User not found'}, 404
-        
         data = request.get_json()
+        email = data.get('email')
         password = data.get('password')
-        if not password:
-            return {'message': 'Password is required'}, 400
 
+        if not email or not password:
+            return {'message': 'Email and password are required'}, 400
+
+        user = User.query.filter_by(email=email).first()
+        
         user._password_hash = generate_password_hash(password)
         db.session.commit()
+
         return {
             'message': 'Password updated successfully',
             'id': user.id,
@@ -80,8 +78,11 @@ class Login(Resource):
 
         if not user or not check_password_hash(user._password_hash, password):
             return {'message': 'Invalid username or password'}, 401
-
-        access_token = create_access_token(identity=user.id)
+        metadata={
+            "username": user.username,
+            "userid": user.id
+        }
+        access_token = create_access_token(identity=user.id, additional_claims=metadata)
         return {
             'access_token': access_token,
             'id': user.id,
@@ -92,7 +93,7 @@ class Login(Resource):
 class IncidentReportResource(Resource):
     @jwt_required()
     def post(self):
-        data = request.get_json()
+        data = request.form
         title = data.get('title')
         description = data.get('description')
         location = data.get('location')
@@ -109,7 +110,7 @@ class IncidentReportResource(Resource):
             db.session.commit()
         except IntegrityError:
             return {'message': 'Incident report already exists'}, 400
-
+        print(incident_report)
         return {
             'message': 'Incident report created successfully',
             'id': incident_report.id,
@@ -153,9 +154,9 @@ class Users(Resource):
 
 class IncidentByID(Resource):
     @jwt_required()
-    def get(self, incident_id):
+    def get(self, id):
         user_id = get_jwt_identity()
-        incident_report = IncidentReport.query.filter_by(id=incident_id, user_id=user_id).first()
+        incident_report = IncidentReport.query.filter_by(id=id, user_id=user_id).first()
         if not incident_report:
             return {'message': 'Incident report not found'}, 404
         return {
@@ -165,8 +166,9 @@ class IncidentByID(Resource):
             'location': incident_report.location,
             'latitude': incident_report.latitude,
             'longitude': incident_report.longitude,
-            'status': incident_report.status
-        }, 200
+            'status': incident_report.status,
+            'media_attachments': incident_report.media_attachments
+                }, 200
     
     @jwt_required()
     def patch(self, id):
@@ -197,9 +199,14 @@ class IncidentByID(Resource):
         incident_report = IncidentReport.query.filter_by(id=id, user_id=user_id).first()
         if not incident_report:
             return {'message': 'Incident report not found'}, 404
-        db.session.delete(incident_report)
-        db.session.commit()
-        return {'message': 'Incident report deleted successfully'}, 200
+        try:
+            MediaAttachment.query.filter_by(incident_report_id=id).delete()
+            db.session.delete(incident_report)
+            db.session.commit()
+            return {'message': 'Incident report deleted successfully'}, 200
+        except IntegrityError:
+            db.session.rollback()
+            return jsonify({'message': 'Error deleting incident report.'}), 500
     
 class AllIncidents(Resource):
     def get(self):
@@ -219,23 +226,31 @@ class AllIncidents(Resource):
 class MediaUpload(Resource):
     @jwt_required()
     def post(self, incident_id):
-        args = parser.parse_args()
-        uploaded_file = args['file']
+        uploaded_files = request.files.getlist('files')
 
-        if uploaded_file:
-            result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
-            file_url = result.get('secure_url')
-
-            new_media = MediaAttachment(file_url=file_url, incident_report_id=incident_id)
-            db.session.add(new_media)
-            db.session.commit()
-
-            return {
-                'message': 'File uploaded successfully',
-                'file_url': file_url
-            }, 201
+        if not uploaded_files:
+            return {'message': 'No files uploaded'}, 400
         
-        return {'message': 'No file uploaded'}, 400
+        uploaded_urls = []
+
+        if uploaded_files:
+            for uploaded_file in uploaded_files:
+                result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
+                file_url = result.get('secure_url')
+                uploaded_urls.append(file_url)
+
+                new_media = MediaAttachment(file_url=file_url, incident_report_id=incident_id)
+                db.session.add(new_media)
+            
+        db.session.commit()
+        print('success')
+
+        return {
+            'message': 'Files uploaded successfully',
+            'uploaded_urls': uploaded_urls
+        }, 201
+        
+        
 
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
