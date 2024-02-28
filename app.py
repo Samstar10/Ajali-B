@@ -260,7 +260,6 @@ class MediaUpload(Resource):
     def post(self, incident_id):
         args = parser.parse_args()
         uploaded_files = args.getlist('files')
-
         if not uploaded_files:
             return {'message': 'No files uploaded'}, 400
         
@@ -276,7 +275,6 @@ class MediaUpload(Resource):
                 db.session.add(new_media)
             
         db.session.commit()
-
         return {
             'message': 'Files uploaded successfully',
             'uploaded_urls': uploaded_urls

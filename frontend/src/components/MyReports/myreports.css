@@ -1,0 +1,146 @@
+.maindiv__myreports {
+    height: 90vh;
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+.uldiv {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.logoutbtn {
+    display: flex;
+    justify-content: center;
+    padding: .5rem;
+}
+
+.logoutbtn h2 {
+    color: #938d8d;
+    font-weight: 350;
+}
+
+.textdiv h4 {
+    font-size: 15px;
+    color: #c6bcbc;
+    font-family: var(--font-family);
+    font-weight: 300;
+}
+
+.textdiv h2 {
+    font-size: 30px;
+    color: #c6bcbc;
+    font-weight: 500;
+}
+
+.OneReport {
+    border: 2px solid rgb(174, 165, 165);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    padding: 0 .5rem;
+    border-radius: 8px;
+    
+}
+
+.divmap1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 1rem;
+    top: 0;
+}
+
+.divmap1__button button {
+    width: 150px;
+    font-size: 25px;
+    margin-left: -1.5rem;
+    border: none;
+    background: transparent;
+    color: #877c7c;
+}
+
+.divmap1__button2 button{
+    width: 150px;
+    font-size: 25px;
+    color: #877c7c;
+    border: none;
+    background: transparent;
+    text-decoration: underline;
+}
+
+.divmap1__button2 button:hover {
+    transform: scale(1.02);
+    color: #7c7676;
+    cursor: pointer;
+}
+
+.divmap1__button button:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.divmap__textmap {
+    display: grid;
+    grid-template-columns: 40% 59%;
+    grid-gap: 1rem;
+}
+
+.divmap__textmap-text {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 0 3rem;
+    justify-content: flex-start;
+    color: #9a9292;
+}
+
+.divmap__textmap-text h1 {
+    font-weight: 600;
+    font-size: 50px;
+    margin: 0 0 2rem 0;
+}
+
+.divmap__textmap-text h3 {
+    font-size: 30px;
+    margin: 0 0 2rem;
+}
+
+.divmap__textmap-text p {
+    font-size: 22px;
+}
+
+.mediadiv {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.mappy{
+    height: 60vh;
+    border: 2px solid rgb(88, 88, 83);
+    border-radius: 5px;
+    box-shadow: 5px 6px 22px 3px rgba(0,0,0,0.75);
+}
+
+.mark{
+    background-size: cover;
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    cursor: pointer;
+}
