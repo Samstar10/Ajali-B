@@ -10,7 +10,7 @@ from config import app, db, api
 from models import User, IncidentReport, MediaAttachment
 
 parser = reqparse.RequestParser()
-parser.add_argument('file', type=FileStorage, location='files')
+parser.add_argument('files', type=FileStorage, location='files', action='append')
 
 @app.route('/')
 def index():
@@ -64,6 +64,7 @@ class Signup(Resource):
             'email': user.email
         }, 200
         
+        
     
 class Login(Resource):
     def post(self):
@@ -78,9 +79,10 @@ class Login(Resource):
 
         if not user or not check_password_hash(user._password_hash, password):
             return {'message': 'Invalid username or password'}, 401
-        metadata={
-            "username": user.username,
-            "userid": user.id
+
+        metadata = {
+            'username': user.username,
+            'id': user.id
         }
         access_token = create_access_token(identity=user.id, additional_claims=metadata)
         return {
@@ -119,7 +121,13 @@ class IncidentReportResource(Resource):
             'location': incident_report.location,
             'latitude': incident_report.latitude,
             'longitude': incident_report.longitude,
-            'status': incident_report.status
+            'status': incident_report.status,
+            'media_attachments': [
+                {
+                    'id': media_attachment.id,
+                    'file_url': media_attachment.file_url
+                } for media_attachment in incident_report.media_attachments
+            ]
         }, 201
     
     @jwt_required()
@@ -134,7 +142,13 @@ class IncidentReportResource(Resource):
                 'location': incident_report.location,
                 'latitude': incident_report.latitude,
                 'longitude': incident_report.longitude,
-                'status': incident_report.status
+                'status': incident_report.status,
+                'media_attachments': [
+                    {
+                        'id': media_attachment.id,
+                        'file_url': media_attachment.file_url
+                    } for media_attachment in incident_report.media_attachments
+                ]
             } for incident_report in incident_reports]
         }, 200
 
@@ -167,8 +181,13 @@ class IncidentByID(Resource):
             'latitude': incident_report.latitude,
             'longitude': incident_report.longitude,
             'status': incident_report.status,
-            'media_attachments': incident_report.media_attachments
-                }, 200
+            'media_attachments': [
+                {
+                    'id': media_attachment.id,
+                    'file_url': media_attachment.file_url
+                } for media_attachment in incident_report.media_attachments
+            ]
+        }, 200
     
     @jwt_required()
     def patch(self, id):
@@ -190,7 +209,13 @@ class IncidentByID(Resource):
             'location': incident_report.location,
             'latitude': incident_report.latitude,
             'longitude': incident_report.longitude,
-            'status': incident_report.status
+            'status': incident_report.status,
+            'media_attachments': [
+                {
+                    'id': media_attachment.id,
+                    'file_url': media_attachment.file_url
+                } for media_attachment in incident_report.media_attachments
+            ]
         }, 200
     
     @jwt_required()
@@ -206,7 +231,7 @@ class IncidentByID(Resource):
             return {'message': 'Incident report deleted successfully'}, 200
         except IntegrityError:
             db.session.rollback()
-            return jsonify({'message': 'Error deleting incident report.'}), 500
+            return {'message': 'Failed to delete incident report'}, 500
     
 class AllIncidents(Resource):
     def get(self):
@@ -219,15 +244,21 @@ class AllIncidents(Resource):
                 'location': incident_report.location,
                 'latitude': incident_report.latitude,
                 'longitude': incident_report.longitude,
-                'status': incident_report.status
+                'status': incident_report.status,
+                'media_attachments': [
+                    {
+                        'id': media_attachment.id,
+                        'file_url': media_attachment.file_url
+                    } for media_attachment in incident_report.media_attachments
+                ]
             } for incident_report in incident_reports]
         }, 200
     
 class MediaUpload(Resource):
     @jwt_required()
     def post(self, incident_id):
-        uploaded_files = request.files.getlist('files')
-
+        args = parser.parse_args()
+        uploaded_files = args.getlist('files')
         if not uploaded_files:
             return {'message': 'No files uploaded'}, 400
         
@@ -243,13 +274,46 @@ class MediaUpload(Resource):
                 db.session.add(new_media)
             
         db.session.commit()
-        print('success')
-
         return {
             'message': 'Files uploaded successfully',
             'uploaded_urls': uploaded_urls
         }, 201
+    
+    @jwt_required()
+    def get(self, id):
+        media_attachments = MediaAttachment.query.filter_by(incident_id=id).all()
+        return {
+            'media_attachments': [{
+                'id': media_attachment.id,
+                'file_url': media_attachment.file_url
+            } for media_attachment in media_attachments]
+        }, 200
+
+    # def post(self, incident_id):
+    #     args = parser.parse_args()
+    #     uploaded_file = args['file']
+
+    #     if uploaded_file:
+    #         result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
+    #         file_url = result.get('secure_url')
+
+    #         new_media = MediaAttachment(file_url=file_url, incident_report_id=incident_id)
+    #         db.session.add(new_media)
+    #         db.session.commit()
+
+    #         return {
+    #             'message': 'File uploaded successfully',
+    #             'file_url': file_url
+    #         }, 201
         
+    #     return {'message': 'No file uploaded'}, 400
+
+
+class Logout(Resource):
+    @jwt_required()
+    def delete(self):
+        pass
+
         
 
 api.add_resource(Signup, '/signup')
