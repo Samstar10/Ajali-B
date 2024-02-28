@@ -170,5 +170,61 @@ class TestallIncidents:
             }]
         }, 200
         
-        
-
+class TestMediaUpload:
+    def test_upload_one_file(self, mocker):
+        # Mock the necessary dependencies
+        mocker.patch('flask.request')
+        mocker.patch('flask.session')
+        mocker.patch('flask.jsonify')
+        mocker.patch('flask_restful.Resource')
+        mocker.patch('flask_restful.reqparse.RequestParser')
+        mocker.patch('flask_jwt_extended.jwt_required')
+        mocker.patch('flask_jwt_extended.get_jwt_identity')
+        mocker.patch('cloudinary.uploader.upload')
+        mocker.patch('werkzeug.datastructures.FileStorage')
+        mocker.patch('config.app')
+        mocker.patch('config.db')
+        mocker.patch('config.api')
+        mocker.patch('models.User')
+        mocker.patch('models.IncidentReport')
+        mocker.patch('models.MediaAttachment')
+    
+        # Create a mock instance of the MediaUpload class
+        media_upload = MediaUpload()
+    
+        # Set up the necessary mock data
+        incident_id = 1
+        uploaded_file = mocker.Mock()
+        uploaded_file.stream = mocker.Mock()
+        uploaded_files = [uploaded_file]
+    
+        # Mock the return value of the upload function
+        upload_result = {'secure_url': 'https://example.com/file'}
+        upload_mock = mocker.Mock(return_value=upload_result)
+        upload_mock.attach_mock(mocker.Mock(), 'stream')
+        upload_mock.attach_mock(mocker.Mock(), 'folder')
+        upload_mock.attach_mock(mocker.Mock(), 'get')
+        upload_mock.get.return_value = upload_result
+        mocker.patch('cloudinary.uploader.upload', new=upload_mock)
+    
+        # Mock the necessary database operations
+        db_session_mock = mocker.Mock()
+        db_session_mock.add = mocker.Mock()
+        db_session_mock.commit = mocker.Mock()
+        db_mock = mocker.Mock()
+        db_mock.session = db_session_mock
+        mocker.patch('config.db', new=db_mock)
+    
+        # Invoke the post method of the MediaUpload class
+        response = media_upload.post(incident_id)
+    
+        # Assert that the necessary methods were called with the correct arguments
+        upload_mock.assert_called_once_with(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
+        db_session_mock.add.assert_called_once_with(mocker.ANY)
+        db_session_mock.commit.assert_called_once()
+    
+        # Assert the response
+        assert response == {
+            'message': 'Files uploaded successfully',
+            'uploaded_urls': ['https://example.com/file']
+        }        
