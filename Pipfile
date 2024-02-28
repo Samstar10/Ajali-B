@@ -20,6 +20,7 @@ flask-jwt-extended = "*"
 cloudinary = "*"
 python-dotenv = "*"
 gunicorn = "*"
+pytest-mock = "*"
 
 [dev-packages]
 

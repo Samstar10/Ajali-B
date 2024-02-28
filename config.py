@@ -10,8 +10,12 @@ import cloudinary
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
 from dotenv import load_dotenv
+<<<<<<< HEAD
 import os
 from flask_cors import CORS
+=======
+from datetime import timedelta
+>>>>>>> 052992f41e25741620616e0cd5fbd8d8f61a391f
 
 load_dotenv()
 
@@ -29,7 +33,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 app.config['JWT_SECRET_KEY'] = 'super-secret'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 052992f41e25741620616e0cd5fbd8d8f61a391f
 
 jwt = JWTManager(app)
 
