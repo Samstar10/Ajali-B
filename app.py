@@ -44,7 +44,6 @@ class Signup(Resource):
             'role': user.role
         }, 201
     
-
     def patch(self):
         data = request.get_json()
         email = data.get('email')
@@ -96,7 +95,6 @@ class Login(Resource):
 class IncidentReportResource(Resource):
     @jwt_required()
     def post(self):
-        # data = request.get_json()
         data = request.form
         title = data.get('title')
         description = data.get('description')
@@ -114,7 +112,7 @@ class IncidentReportResource(Resource):
             db.session.commit()
         except IntegrityError:
             return {'message': 'Incident report already exists'}, 400
-
+        print(incident_report)
         return {
             'message': 'Incident report created successfully',
             'id': incident_report.id,
@@ -261,7 +259,6 @@ class MediaUpload(Resource):
     def post(self, incident_id):
         args = parser.parse_args()
         uploaded_files = args.getlist('files')
-
         if not uploaded_files:
             return {'message': 'No files uploaded'}, 400
         
@@ -277,7 +274,6 @@ class MediaUpload(Resource):
                 db.session.add(new_media)
             
         db.session.commit()
-
         return {
             'message': 'Files uploaded successfully',
             'uploaded_urls': uploaded_urls
