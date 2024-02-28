@@ -6,6 +6,9 @@ import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, N
 import React, { useState } from 'react';
 import Dash from "./components/dash/dash";
 import Dashboard from "./components/Dashboard/dashboard";
+import Report from "./components/Report/report";
+import MyReports from "./components/MyReports/myreports";
+import Contact from "./components/Contact/contact";
 import './App.css'
 
 function App() {
@@ -24,7 +27,10 @@ function App() {
   
             {/* If user is not logged in, they can't use history to go back to a previously logged in route and will be redirected to login page*/}
             <Route path='/dashboard' element={authenticated ? <Dashboard setIsAuthenticated={setIsAuthenticated} /> : <Navigate to='/Login' />} >
+            <Route path='reportaccident' element={authenticated ? <Report setIsAuthenticated={setIsAuthenticated} /> : <Navigate to='/Login' />} />
             <Route path='dash' element={authenticated ? <Dash setIsAuthenticated={setIsAuthenticated} /> : <Navigate to='/Login' />} />
+            <Route path='myreports' element={authenticated ? <MyReports setIsAuthenticated={setIsAuthenticated} /> : <Navigate to='/Login' />} />
+            <Route path='contact' element={authenticated ? <Contact setIsAuthenticated={setIsAuthenticated} /> : <Navigate to='/Login' />} />
           </Route>
         </Route>
       )
@@ -37,3 +43,4 @@ function App() {
   }
   
   export default App;
+  

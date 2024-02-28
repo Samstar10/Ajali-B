@@ -1,0 +1,9 @@
+.mark{
+    background-image: url('https://w7.pngwing.com/pngs/689/1011/png-transparent-thumbtack-push-pin-pin-paper-pin-push-stationary-3d-icon.png');
+    width: 40px;
+    background-size: cover;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
