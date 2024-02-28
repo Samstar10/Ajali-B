@@ -9,7 +9,7 @@ import cloudinary
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
 from dotenv import load_dotenv
-import os
+from datetime import timedelta
 
 load_dotenv()
 
@@ -26,6 +26,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ajali_backend_user:X0BxW1h
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 app.config['JWT_SECRET_KEY'] = 'super-secret'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 
 jwt = JWTManager(app)
 
