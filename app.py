@@ -282,6 +282,16 @@ class MediaUpload(Resource):
             'message': 'Files uploaded successfully',
             'uploaded_urls': uploaded_urls
         }, 201
+    
+    @jwt_required()
+    def get(self, id):
+        media_attachments = MediaAttachment.query.filter_by(incident_id=id).all()
+        return {
+            'media_attachments': [{
+                'id': media_attachment.id,
+                'file_url': media_attachment.file_url
+            } for media_attachment in media_attachments]
+        }, 200
 
     # def post(self, incident_id):
     #     args = parser.parse_args()
