@@ -170,9 +170,9 @@ class Users(Resource):
 
 class IncidentByID(Resource):
     @jwt_required()
-    def get(self, incident_id):
+    def get(self, id):
         user_id = get_jwt_identity()
-        incident_report = IncidentReport.query.filter_by(id=incident_id, user_id=user_id).first()
+        incident_report = IncidentReport.query.filter_by(id=id, user_id=user_id).first()
         if not incident_report:
             return {'message': 'Incident report not found'}, 404
         return {
