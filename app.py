@@ -81,7 +81,11 @@ class Login(Resource):
         if not user or not check_password_hash(user._password_hash, password):
             return {'message': 'Invalid username or password'}, 401
 
-        access_token = create_access_token(identity=user.id)
+        metadata = {
+            'username': user.username,
+            'id': user.id
+        }
+        access_token = create_access_token(identity=user.id, additional_claims=metadata)
         return {
             'access_token': access_token,
             'id': user.id,
@@ -222,9 +226,14 @@ class IncidentByID(Resource):
         incident_report = IncidentReport.query.filter_by(id=id, user_id=user_id).first()
         if not incident_report:
             return {'message': 'Incident report not found'}, 404
-        db.session.delete(incident_report)
-        db.session.commit()
-        return {'message': 'Incident report deleted successfully'}, 200
+        try:
+            MediaAttachment.query.filter_by(incident_report_id=id).delete()
+            db.session.delete(incident_report)
+            db.session.commit()
+            return {'message': 'Incident report deleted successfully'}, 200
+        except IntegrityError:
+            db.session.rollback()
+            return {'message': 'Failed to delete incident report'}, 500
     
 class AllIncidents(Resource):
     def get(self):
