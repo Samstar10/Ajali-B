@@ -13,7 +13,22 @@
     background: rgb(61, 59, 59);
     box-shadow: 5px 6px 22px 3px rgba(0,0,0,0.75);
     cursor: pointer;
-    
+    position: relative;
+}
+
+#statusdiv {
+    border-radius: 8px;
+    font-size: 15px;
+    padding: .3rem .5rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    background: rgb(212, 45, 45);
+    color: rgb(220, 211, 211);
+    min-width: 100px;
+    text-align: center;
 }
 
 .buttdiv {

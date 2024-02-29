@@ -14,6 +14,23 @@
     margin: 1rem 0;
 }
 
+.header_div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-decoration: none;
+    border: 1px solid rgb(118, 86, 86);
+    margin: 2rem .6rem 0 .6rem;
+    font-size: 15px;
+    font-weight: 200;
+    color: #8a8181;
+    padding: .2rem 2rem;
+    border-radius: 8px;
+    background: rgb(61, 59, 59);
+    box-shadow: 5px 6px 22px 3px rgba(0,0,0,0.75);
+    cursor: pointer;
+}
+
 .ul {
     list-style: none;
     display: flex;
@@ -45,7 +62,6 @@
 }
 
 .OneReport {
-    border: 2px solid rgb(174, 165, 165);
     height: 100%;
     display: flex;
     flex-direction: column;

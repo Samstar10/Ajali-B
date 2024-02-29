@@ -43,7 +43,7 @@ const Login = ({authenticated, setIsAuthenticated}) => {
             localStorage.setItem("access_token", access);
             setIsAuthenticated(true)
 
-            navigate("/dashboard")
+            navigate("/dashboard/myreports")
         } catch (error) {
             console.error("login failed", error.message)
         }

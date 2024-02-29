@@ -42,7 +42,8 @@ const SingleReport = ({ setEd, setLat, setLong, setDesc, setIsOpen, report, setR
                 onClick={handleDisplayOneReport}
                 id='descp'
                 className='descr'>
-                <p>Report Name: <span style={{fontWeight: "800", color: "black", textTransform: "uppercase"}}>{title}</span></p>
+                <p><span style={{fontWeight: "800", color: "black", textTransform: "uppercase"}}>{title}</span></p>
+                <div id='statusdiv'>{report.status}</div>
                 <div className='buttdiv'>
                     <button onClick={() => {
                         setEd(id)

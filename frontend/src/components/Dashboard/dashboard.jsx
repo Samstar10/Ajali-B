@@ -7,7 +7,7 @@ import { faFileSignature } from "@fortawesome/free-solid-svg-icons";
 import { faBusinessTime } from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = ({ setIsAuthenticated }) => {
-    const [isAdmin, setIsAdmin] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false);
     const location = useLocation();
 
     const navigate = useNavigate();
@@ -16,8 +16,8 @@ const Dashboard = ({ setIsAuthenticated }) => {
 
         if (token) {
             const payload = JSON.parse(atob(token.split('.')[1]));
-            const isAdmin = payload.id
-            setIsAdmin(isAdmin)
+            const role = payload.role
+            role === "admin" ? setIsAdmin(true) : setIsAdmin(false)
         }
     }, []);
 
@@ -36,7 +36,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
                         <h1>AJALI</h1>
                         {isAdmin ? (
                             <div className={location.pathname === '/dashboard/dash' ? "active-div" : "divac1"}>
-                                <NavLink to='dash'><FontAwesomeIcon className="icon" icon={faBusinessTime} />Dashboard</NavLink>
+                                <NavLink to='dash'><FontAwesomeIcon className="icon" icon={faBusinessTime} />User Reports</NavLink>
                             </div>
                         ) : (<div></div>)}
                         <div className={location.pathname === '/dashboard/reportaccident' ? "active-div" : "divac2"}>

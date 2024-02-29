@@ -68,14 +68,18 @@ const MyReports = ({ setIsAuthenticated }) => {
             {<Modal setIsOpen={setIsOpen} isOpen={isOpen} latitude={lat} longitude={long} description={desc} id={ed} />}
             {displayOneReport && (
                 <div>
-                <div className='textdiv'>
-                    <h4>Welcome Back,</h4>
-                    <h2 style={{ textTransform: "capitalize" }}>{userName}</h2>
+                    <div className='textdiv'>
+                        <h4>Welcome Back,</h4>
+                        <h2 style={{ textTransform: "capitalize" }}>{userName}</h2>
+                    </div>
                 </div>
-                <div className='logoutbtn'>
-                    <h2>My Reports</h2>
+            )}
+            {displayOneReport && (
+                <div className='header_div'>
+                    <h3>Report Name</h3>
+                    <div style={{ alignSelf: "center" }}><h4>Status</h4></div>
+                    <h3>Edit</h3>
                 </div>
-            </div>
             )}
             <div className='uldiv'>
                 {displayOneReport ? (
@@ -102,15 +106,15 @@ const MyReports = ({ setIsAuthenticated }) => {
                             <div className='divmap1__button2'><button>Edit Report</button></div>
                         </div>
                         <div className='divmap__textmap'>
-                        <div className='divmap__textmap-text'>
-                            <h1><span style={{ WebkitTextFillColor: "red"}}>{report.title}</span>, {location}</h1>
-                            <h3>📍 {lat}, {long} {location}</h3>
-                            <h4 style={{ textDecoration: "underline"}}>Description</h4>
-                            <p>{report.description}</p>
-                        </div>
-                        <div className='mappy'>
-                            <Map location={location} longitude={long} latitude={lat} />
-                        </div>
+                            <div className='divmap__textmap-text'>
+                                <h1><span style={{ WebkitTextFillColor: "red" }}>{report.title}</span>, {location}</h1>
+                                <h3>📍 {lat}, {long} {location}</h3>
+                                <h4 style={{ textDecoration: "underline" }}>Description</h4>
+                                <p>{report.description}</p>
+                            </div>
+                            <div className='mappy'>
+                                <Map location={location} longitude={long} latitude={lat} />
+                            </div>
                         </div>
                         <div className='mediadiv'>
                             <p>Images go here</p>

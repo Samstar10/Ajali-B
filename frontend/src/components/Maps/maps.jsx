@@ -1,6 +1,5 @@
 import mapboxgl from "mapbox-gl";
 import { useEffect } from "react";
-import mapicon from '../assets/mapicon';
 import './maps.css';
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -29,7 +28,7 @@ const Map = ({ longitude, latitude, location }) => {
         mapboxgl.accessToken = MAPBOX_TOKEN;
         const map = new mapboxgl.Map({
             container: 'mp',
-            style: "mapbox://styles/mapbox/streets-v9",
+            style: "mapbox://styles/mapbox/streets-v11",
             center: geojson.features[0].geometry.coordinates,
             zoom: 13
         });
