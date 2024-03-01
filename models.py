@@ -58,7 +58,7 @@ class MediaAttachment(db.Model, SerializerMixin):
     __tablename__ = 'media_attachments'
 
     id = db.Column(db.Integer, primary_key=True)
-    file_url = db.Column(db.String, nullable=False)
+    file_url = db.Column(db.String)
     incident_report_id = db.Column(db.Integer, db.ForeignKey('incident_reports.id'), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())

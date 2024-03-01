@@ -1,0 +1,154 @@
+.overlay {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    z-index: 1;
+}
+
+#modal_form {
+    border: 2px solid rgb(144, 136, 136);
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal__content {
+    padding: .3rem;
+    border: 4px solid rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: auto;
+}
+
+#modalbutton {
+    font-size: 22px;
+    min-width: 35px;
+    background: transparent;
+    border-radius: 8px;
+    border: 4px solid black;
+    color: #7e7676;
+    cursor: pointer;
+    position: absolute;
+    top: 8%;
+    right: 10%;
+}
+
+
+.modal__content h2 {
+    color: #bdb4b4;
+    font-weight: 200;
+    font-size: 33px;
+    text-decoration: underline;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: .5rem;
+}
+
+form div {
+    margin: .5rem 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#buttondiv button {
+    border: 1px solid rgb(106, 101, 101);
+    width: 19vw;
+    cursor: pointer;
+}
+
+#buttondiv button:hover {
+    transform: scale(1.08);
+    border: 1.5px solid #fff;
+}
+
+label {
+    color: #bdb4b4;
+    font-size: 17px;
+}
+
+.latsdivs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+input {
+    padding: 0;
+    color: #bdb4b4;
+    font-size: 25px;
+    text-align: center;
+}
+
+input::placeholder {
+    color: white;
+}
+
+
+#latitude:not(value-shown) {
+    color: rgb(187, 181, 181);
+}
+
+#description {
+    color: #bdb4b4;
+    font-size: 15px;
+    padding: .5rem;
+}
+
+textarea::placeholder {
+    color: rgb(169, 162, 162);
+    font-size: 20px;
+}
+
+.imgdiv {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: .3rem;
+    justify-content: center;
+}
+
+.imgdiv__images {
+    border: 5px solid rgb(168, 164, 164);
+    border-radius: 8px;
+    width: 30%;
+    height: 95%;
+    margin: 0 .5rem;
+}
+
+.imgdiv__images img {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.imgdiv__images img:hover {
+    transform: scale(2);
+    border: 5px solid rgb(60, 57, 57);
+    border-radius: 8px;
+}
+
+.mapbox {
+    border: 2px solid rgb(143, 136, 136);
+    height: 100%;
+}

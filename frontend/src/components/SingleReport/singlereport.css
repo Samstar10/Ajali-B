@@ -1,0 +1,92 @@
+#descp {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-decoration: none;
+    border: 1px solid rgb(118, 86, 86);
+    margin: 1rem 0;
+    font-size: 18px;
+    font-weight: 200;
+    color: #fff;
+    padding: .5rem;
+    border-radius: 8px;
+    background: rgb(61, 59, 59);
+    box-shadow: 5px 6px 22px 3px rgba(0,0,0,0.75);
+    cursor: pointer;
+    position: relative;
+}
+
+#statusdiv {
+    border-radius: 8px;
+    font-size: 15px;
+    padding: .3rem .5rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    color: rgb(220, 211, 211);
+    min-width: 100px;
+    text-align: center;
+}
+
+.red {
+    background: red;
+}
+
+.green {
+    background: green;
+}
+
+.blue {
+    background: blue;
+}
+
+.buttdiv {
+    position: relative;
+}
+
+.descr button {
+    background: transparent;
+    border: none;
+    margin: 0 .5rem;
+    cursor: pointer;
+}
+
+.descr button span:hover {
+    font-size: 20px;
+}
+
+.explainer {
+    position: absolute;
+    z-index: 2;
+    font-weight: 100;
+    border: 1px solid black;
+    padding: 0 1px;
+    font-size: 15px;
+    background: black;
+    top: 30px;
+    left: 7px;
+    visibility: hidden;
+}
+#divbutt:hover + .explainer {
+    visibility: visible;
+}
+
+.explainer2 {
+    position: absolute;
+    z-index: 2;
+    font-weight: 100;
+    border: 1px solid black;
+    padding: 0 1px;
+    font-size: 15px;
+    background: black;
+    top: 30px;
+    left: 25px;
+    visibility: hidden;
+}
+
+#divbutt2:hover + .explainer2 {
+    visibility: visible;
+}
+

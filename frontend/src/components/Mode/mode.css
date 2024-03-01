@@ -1,0 +1,49 @@
+.mode__div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: .2rem .2rem;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 90;
+    align-items: center;
+}
+
+#mode__div-button1 {
+    min-width: 140px;
+    border: 1px solid rgb(104, 110, 115);
+    padding: 1rem;
+    font-size: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    -webkit-text-fill-color: rgb(251, 244, 243);
+    background: rgb(145, 139, 139, 0.2);
+}
+
+#mode__div-button2 {
+    min-width: 140px;
+    border: 1px solid rgb(104, 107, 110);
+    padding: 1rem;
+    font-size: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    -webkit-text-fill-color: rgb(247, 238, 238);
+    background: rgb(145, 139, 139, 0.2);
+}
+
+#button0 {
+    min-width: 140px;
+    border: 1px solid rgb(104, 107, 110);
+    padding: 1rem;
+    font-size: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    -webkit-text-fill-color: rgb(240, 232, 232);
+    background: rgb(145, 139, 139, 0.2);
+}
+
+.mode__div button:hover {
+    transform: scale(1.1);
+    border: 2px solid white;
+}
