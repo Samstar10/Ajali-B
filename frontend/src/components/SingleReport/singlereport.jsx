@@ -1,8 +1,7 @@
 import './singlereport.css';
 
-const SingleReport = ({ setEd, setLat, setLong, setDesc, setIsOpen, report, setReport, setDisplayOneReport, setLocation }) => {
+const SingleReport = ({ setEd, setLat, setLong, setDesc, setIsOpen, report, setReport, setDisplayOneReport, setLocation, refr, setRefr }) => {
     const { id, latitude, longitude, description, location, status, title } = report;
-
 
     const handleDelete = () => {
         const token = localStorage.getItem('access_token');
@@ -22,6 +21,7 @@ const SingleReport = ({ setEd, setLat, setLong, setDesc, setIsOpen, report, setR
                 throw new Error(`Failed to delete request, ${response.statusText}`)
             }
             console.log(response)
+            setRefr(!refr)
         })
         .catch((error) => {
             console.error(error)
@@ -39,11 +39,10 @@ const SingleReport = ({ setEd, setLat, setLong, setDesc, setIsOpen, report, setR
     return (
         <li className='main__reportdiv'>
             <div
-                onClick={handleDisplayOneReport}
-                id='descp'
+               id='descp'
                 className='descr'>
                 <p><span style={{fontWeight: "800", color: "black", textTransform: "uppercase"}}>{title}</span></p>
-                <div id='statusdiv'>{report.status}</div>
+                <div id='statusdiv' className={report.status === 'resolved' ? "green" : (report.status === 'rejected' ? "red": "blue")} >{report.status}</div>
                 <div className='buttdiv'>
                     <button onClick={() => {
                         setEd(id)
@@ -51,6 +50,7 @@ const SingleReport = ({ setEd, setLat, setLong, setDesc, setIsOpen, report, setR
                         setLong(longitude)
                         setDesc(description)
                         setIsOpen(true)
+                        handleDisplayOneReport()
                     }} id='divbutt'>
                         <span role='img' aria-label='edit'>
                             ✏️

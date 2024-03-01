@@ -1,8 +1,8 @@
 .mark{
     background-image: url('https://static.vecteezy.com/system/resources/previews/011/016/930/original/location-pin-3d-image-for-travel-equipment-location-pin-with-red-color-shade-in-a-3d-effect-gps-location-pin-on-a-transparent-background-free-png.png');
-    width: 40px;
+    width: 50px;
     background-size: cover;
-    height: 40px;
+    height: 50px;
     border-radius: 50%;
     cursor: pointer;
 }

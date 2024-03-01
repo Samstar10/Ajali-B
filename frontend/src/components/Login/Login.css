@@ -12,7 +12,7 @@
 
 
 input::placeholder {
-    padding-left: 30px;
+    padding-left: 12px;
     font-size: 18px;
     font-family: sans-serif;
     font-weight: 100;
@@ -20,9 +20,8 @@ input::placeholder {
 }
 
 .loginform input {
-    text-indent: 45px;
+    text-indent: 5px;
     font-size: 20px;
-    color: #fff;
     min-height: 55px;
 
 }

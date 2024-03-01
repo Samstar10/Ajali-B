@@ -22,12 +22,16 @@
     position: relative;
 }
 
+#aj {
+    display: flex;
+    flex-direction: column;
+    margin-top: -3rem;
+}
+
 .dashboard__container-content {
-    border: 2px solid;
     border-radius: 9px;
     padding: 1rem;
     box-shadow: -3px 20px 91px -25px rgba(0,0,0,0.75);
-    background-image: linear-gradient(to right top, #2a2b2e, #2e2e33, #313237, #36353c, #3a3840, #3c3840, #3e3940, #403940, #3e373c, #3c3539, #3a3436, #373233);
 }
 
 .dashboard__container-nav h1 {
@@ -146,6 +150,10 @@ nav Navlink.active {
     box-shadow: 5px 6px 22px 3px rgba(0,0,0,0.75);
 }
 
+#mobile__menu {
+    display: none;
+}
+
 @media screen and (max-width: 1200px) {
     .dashboard__container {
         display: flex;
@@ -167,15 +175,26 @@ nav Navlink.active {
     }
     .dashboard__container-content {
         height: 100%;
+        width: 100%;
         border-radius: 0;
         position: relative;
         margin: 0;
-        padding: 2.5rem;
+        padding: 0;
     }
     .dashboard__container-nav nav {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: flex-start;
+    }
+
+    #aj {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    #aj div {
+        margin: 0 0 0 6rem;
     }
     .dashboard__container-nav nav p {
         display: none;
@@ -192,4 +211,63 @@ nav Navlink.active {
         padding-left: .5rem;
         margin-top: -1.5rem;
     }
+}
+
+@media screen and (max-width: 950px) {
+    .dashboard__container-content {
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        padding: 0;
+    }
+
+    #aj {
+        display: none;
+    }
+
+    #mobile__menu {
+        display: flex;
+        flex-direction: column;
+        margin: -3rem 0 0 80%;
+        position: relative;
+    }
+
+    #dropdown__menu-container {
+        position: absolute;
+        right: 2vw;
+        top: 12vh;
+        border-radius: 3px;
+        width: 400px;
+        min-height: 15vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: .5rem;
+        background: rgba(69, 67, 67);
+    }
+
+    #dropdown__menu-container div {
+        margin: .2rem 0;
+        width: 100%;
+    }
+
+    #dropdown__menu-container div:hover {
+        color: rgb(142, 177, 177);
+    }
+
+    #dropdown__menu {
+        width: 100%;
+        height: 100%;
+    }
+
+    .xmark {
+        font-size: 25px;
+    }
+
+    .barmark {
+        font-size: 25px;
+    }
+
+
 }

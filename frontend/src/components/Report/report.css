@@ -105,3 +105,11 @@ textarea {
     font-size: 21px;
     border: 1px solid #fff;
 }
+
+
+@media screen and (max-width: 1050px) {
+    #buttondiv button {
+        font-size: 17px;
+        min-width: 160px;
+    }
+}

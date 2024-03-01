@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import './modal.css';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const Modal = ({ id, latitude, longitude, description, isOpen, setIsOpen }) => {
     const [latitud, setLatitude] = useState(latitude);
@@ -9,16 +10,27 @@ const Modal = ({ id, latitude, longitude, description, isOpen, setIsOpen }) => {
     const [images, setImages] = useState([]);
 
 
+    const token = localStorage.getItem('access_token')
+    if (token) {
+        const pay_load = jwtDecode(token)
+        const current_id = pay_load.userid
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+    } else {
+        console.log("token is null or undefined")
+    }
+
     if (isOpen === false) {
         return null;
     }
 
 
     const handleSubmit = () => {
-        fetch(`/reports/${id}`, {
+        fetch(`/incidents/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
                 latitude: latitud,
@@ -69,13 +81,10 @@ const Modal = ({ id, latitude, longitude, description, isOpen, setIsOpen }) => {
                             </div>
                         </div>
                         <div className='imgdiv'>
-                            {images && images.map((im) => (
-                                <div key={im.id} className='imgdiv__images'>
-                                    <img src={im.file_url} alt='image' />
-                                </div>
-                            ))}
+                         <h2 style={{textDecoration: "none"}}>Edit your Report</h2>
                         </div>
                         <div>
+                            <h4 style={{ color: "white", fontWeight: 300, marginBottom: ".2rem"}}>Description</h4>
                             <textarea
                                 type='text'
                                 id='description'

@@ -5,10 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCarBurst } from "@fortawesome/free-solid-svg-icons";
 import { faFileSignature } from "@fortawesome/free-solid-svg-icons";
 import { faBusinessTime } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = ({ setIsAuthenticated }) => {
     const [isAdmin, setIsAdmin] = useState(false);
     const location = useLocation();
+    const [toggleMenu, setToggleMenu] = useState(false);
 
     const navigate = useNavigate();
     useEffect(() => {
@@ -25,7 +28,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
         localStorage.removeItem('access_token');
         setIsAuthenticated(false)
         navigate('/')
-    }    
+    }
 
 
     return (
@@ -34,6 +37,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
                 <div className="dashboard__container-nav">
                     <nav>
                         <h1>AJALI</h1>
+                        <div id="aj">
                         {isAdmin ? (
                             <div className={location.pathname === '/dashboard/dash' ? "active-div" : "divac1"}>
                                 <NavLink to='dash'><FontAwesomeIcon className="icon" icon={faBusinessTime} />User Reports</NavLink>
@@ -53,6 +57,25 @@ const Dashboard = ({ setIsAuthenticated }) => {
                         </div>
                         <div className="signout">
                             <button onClick={handleLogout}>Sign Out</button>
+                        </div>
+                        </div>
+                        <div id="mobile__menu">
+                            {toggleMenu
+                                ? <FontAwesomeIcon className="xmark" icon={faXmark} color="#fff" size={33} onClick={() => setToggleMenu(false)} />
+                                : <FontAwesomeIcon className="barmark" icon={faBars} color="#fff" size={33} onClick={() => setToggleMenu(true)} />}
+                            {toggleMenu && (
+                                <div id="dropdown__menu-container">
+                                        <div>
+                                            <NavLink to='reportaccident'>Report Accident</NavLink>
+                                        </div>
+                                        <div>
+                                            <NavLink to='myreports'>My Reports</NavLink>
+                                        </div>
+                                        <div className="signout">
+                                            <button onClick={handleLogout}>Sign Out</button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </nav>
                 </div>

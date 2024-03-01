@@ -9,6 +9,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const MyReports = ({ setIsAuthenticated }) => {
 
+    const [reportMedia, setReportMedia] = useState([]);
+    const [media, setMedia] = useState(false);
     const [displayReports, setDisplayReports] = useState([])
     const [location, setLocation] = useState("")
     const [userName, setUserName] = useState("")
@@ -20,11 +22,11 @@ const MyReports = ({ setIsAuthenticated }) => {
     const [displayOneReport, setDisplayOneReport] = useState(true);
     const [report, setReport] = useState("");
     const MAPBOX_TOKEN = 'pk.eyJ1IjoiemFjbXV0dXJpNDUiLCJhIjoiY2x0M2Zlc2VmMWswaTJrcGw1aHRwdTA4aiJ9.2_UIX3ZDsWv60F_lQE5_rg'
-
+    const token = localStorage.getItem('access_token')
+    const [refr, setRefr] = useState(false);
 
 
     useEffect(() => {
-        const token = localStorage.getItem('access_token')
 
         if (token) {
             console.log(token)
@@ -57,7 +59,30 @@ const MyReports = ({ setIsAuthenticated }) => {
                 console.log(data)
             })
             .catch((error) => { console.error("Error fetching reports", error.message) });
-    }, []);
+    }, [refr]);
+
+    const fetchImages = () => {
+        fetch(`/incidents/media/${report.id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error fetching images', response.statusText)
+                }
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data.media_attachments)
+                setReportMedia(data.media_attachments)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }
 
     const handleBack = () => {
         setDisplayOneReport(true)
@@ -96,6 +121,8 @@ const MyReports = ({ setIsAuthenticated }) => {
                                 setReport={setReport}
                                 setDisplayOneReport={setDisplayOneReport}
                                 setLocation={setLocation}
+                                refr={refr}
+                                setRefr={setRefr}
                             />
                         ))}
                     </ul>
@@ -103,7 +130,12 @@ const MyReports = ({ setIsAuthenticated }) => {
                     <div className='OneReport'>
                         <div className='divmap1'>
                             <div className='divmap1__button'><button onClick={handleBack}><FontAwesomeIcon icon={faArrowLeft} /></button></div>
-                            <div className='divmap1__button2'><button>Edit Report</button></div>
+                            <div className='divmap1__button2'><button onClick={() => {
+                                setIsOpen(true)
+                                setLat(report.latitude)
+                                setLong(report.longitude)
+                                setDesc(report.description)
+                            }}>Edit Report</button></div>
                         </div>
                         <div className='divmap__textmap'>
                             <div className='divmap__textmap-text'>
@@ -111,13 +143,29 @@ const MyReports = ({ setIsAuthenticated }) => {
                                 <h3>📍 {lat}, {long} {location}</h3>
                                 <h4 style={{ textDecoration: "underline" }}>Description</h4>
                                 <p>{report.description}</p>
+                                <button onClick={() => {
+                                    setMedia(!media)
+                                    fetchImages();
+                                }} id='report__media-button'>Media</button>
+                                {media && (
+                                    <div className={media ? "overlay__div-media" : ""}>
+                                        <button onClick={() => {
+                                            setMedia(!media)
+                                            setReportMedia("")
+                                        }} id='xbutton1'>X</button>
+                                        <div className='image__div'>
+                                            {reportMedia && reportMedia.map((image) => (
+                                                <div className='image__div-div'>
+                                                    <img key={image.id} src={`data:image/jpeg;base64,${image.file_url}`} alt='image' />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             <div className='mappy'>
                                 <Map location={location} longitude={long} latitude={lat} />
                             </div>
-                        </div>
-                        <div className='mediadiv'>
-                            <p>Images go here</p>
                         </div>
                     </div>
                 )}

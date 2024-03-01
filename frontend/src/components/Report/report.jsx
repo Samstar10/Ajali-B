@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import './report.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Modal from '../Modal/modal';
 
 const Report = () => {
     const [title, setTitle] = useState("");
@@ -83,7 +82,7 @@ const Report = () => {
             if(!token) {
                 throw new Error('Token not found')
             }            
-            const response = await axios.post(`/incidents/${data}/media`, fd, {
+            const response = await axios.post(`/incidents/media/${data}`, fd, {
                 onUploadProgress: (ProgressEvent => {
                     setProgress(prevState => { return { ...prevState, pc: ProgressEvent.progress * 100 } })
                 }),

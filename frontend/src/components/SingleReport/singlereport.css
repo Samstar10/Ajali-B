@@ -25,10 +25,21 @@
     position: absolute;
     left: 50%;
     top: 10%;
-    background: rgb(212, 45, 45);
     color: rgb(220, 211, 211);
     min-width: 100px;
     text-align: center;
+}
+
+.red {
+    background: red;
+}
+
+.green {
+    background: green;
+}
+
+.blue {
+    background: blue;
 }
 
 .buttdiv {

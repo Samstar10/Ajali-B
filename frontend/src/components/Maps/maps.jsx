@@ -28,7 +28,7 @@ const Map = ({ longitude, latitude, location }) => {
         mapboxgl.accessToken = MAPBOX_TOKEN;
         const map = new mapboxgl.Map({
             container: 'mp',
-            style: "mapbox://styles/mapbox/streets-v11",
+            style: "mapbox://styles/mapbox/streets-v9",
             center: geojson.features[0].geometry.coordinates,
             zoom: 13
         });
