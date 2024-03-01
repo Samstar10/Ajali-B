@@ -1,4 +1,3 @@
-from datetime import timedelta
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
@@ -10,8 +9,6 @@ import cloudinary
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
 from dotenv import load_dotenv
-import os
-from flask_cors import CORS
 from datetime import timedelta
 from flask_cors import CORS
 
@@ -33,7 +30,6 @@ app.json.compact = False
 app.config['JWT_SECRET_KEY'] = 'super-secret'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 
-
 jwt = JWTManager(app)
 
 metadata = MetaData(naming_convention={
@@ -43,7 +39,6 @@ db = SQLAlchemy(metadata=metadata)
 
 migrate = Migrate(app, db)
 db.init_app(app)
-CORS(app)
 
 bcrypt = Bcrypt(app)
 
