@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 import os
 from flask_cors import CORS
 from datetime import timedelta
+from flask_cors import CORS
 
 load_dotenv()
 
@@ -24,6 +25,7 @@ cloudinary.config(
 )
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ajali_backend_user:X0BxW1hUyJH1K3zCtRm7iSy0df9GytUu@dpg-cnendtgl5elc73dc7mp0-a.oregon-postgres.render.com/ajali_backend'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

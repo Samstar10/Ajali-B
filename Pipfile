@@ -21,6 +21,7 @@ cloudinary = "*"
 python-dotenv = "*"
 gunicorn = "*"
 pytest-mock = "*"
+flask-cors = "*"
 
 [dev-packages]
 
