@@ -1,4 +1,3 @@
-from datetime import timedelta
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
@@ -10,8 +9,6 @@ import cloudinary
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
 from dotenv import load_dotenv
-import os
-from flask_cors import CORS
 from datetime import timedelta
 
 load_dotenv()
@@ -40,7 +37,6 @@ db = SQLAlchemy(metadata=metadata)
 
 migrate = Migrate(app, db)
 db.init_app(app)
-CORS(app)
 
 bcrypt = Bcrypt(app)
 

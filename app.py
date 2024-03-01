@@ -1,4 +1,3 @@
-import base64
 from flask import request, session, jsonify
 from flask_restful import Resource, reqparse
 from sqlalchemy.exc import IntegrityError
@@ -45,6 +44,7 @@ class Signup(Resource):
             'role': user.role
         }, 201
     
+
     def patch(self):
         data = request.get_json()
         email = data.get('email')
@@ -83,8 +83,7 @@ class Login(Resource):
 
         metadata = {
             'username': user.username,
-            'id': user.id,
-            'role': user.role
+            'id': user.id
         }
         access_token = create_access_token(identity=user.id, additional_claims=metadata)
         return {
@@ -115,7 +114,7 @@ class IncidentReportResource(Resource):
             db.session.commit()
         except IntegrityError:
             return {'message': 'Incident report already exists'}, 400
-        print(incident_report)
+
         return {
             'message': 'Incident report created successfully',
             'id': incident_report.id,
@@ -194,18 +193,15 @@ class IncidentByID(Resource):
     
     @jwt_required()
     def patch(self, id):
-        user_id = get_jwt_identity()
+        data = request.get_json()
+        status = data.get('status')
 
-        incident_report = IncidentReport.query.filter_by(id=id, user_id=user_id).first()
+        incident_report = IncidentReport.query.filter_by(id=id).first()
 
         if not incident_report:
-            return {'message': 'Incident report not found'}, 404        
-        data = request.get_json()
-        
-        for key, value in data.items():
-            if value is not None and value != '':
-                setattr(incident_report, key, value)
+            return {'message': 'Incident report not found'}, 404
 
+        incident_report.status = status
         db.session.commit()
         return {
             'message': 'Incident report updated successfully',
@@ -251,7 +247,6 @@ class AllIncidents(Resource):
                 'latitude': incident_report.latitude,
                 'longitude': incident_report.longitude,
                 'status': incident_report.status,
-                'user_id': incident_report.user_id,
                 'media_attachments': [
                     {
                         'id': media_attachment.id,
@@ -260,38 +255,13 @@ class AllIncidents(Resource):
                 ]
             } for incident_report in incident_reports]
         }, 200
-        
-    def patch(self):
-        data = request.get_json()
-        incident_report = IncidentReport.query.filter_by(id=data.get('id'), user_id=data.get('user_id')).first()
-
-        if not incident_report:
-            return {'message': 'Incident report not found'}, 404        
-        
-        incident_report.status = data.get('status')
-
-        db.session.commit()
-        return {
-            'message': 'Incident report updated successfully',
-            'id': incident_report.id,
-            'title': incident_report.title,
-            'description': incident_report.description,
-            'location': incident_report.location,
-            'latitude': incident_report.latitude,
-            'longitude': incident_report.longitude,
-            'status': incident_report.status,
-            'media_attachments': [
-                {
-                    'id': media_attachment.id,
-                    'file_url': media_attachment.file_url
-                } for media_attachment in incident_report.media_attachments
-            ]
-        }, 200        
     
 class MediaUpload(Resource):
     @jwt_required()
-    def post(self, id):
-        uploaded_files = request.files.getlist('files')
+    def post(self, incident_id):
+        args = parser.parse_args()
+        uploaded_files = args.getlist('files')
+
         if not uploaded_files:
             return {'message': 'No files uploaded'}, 400
         
@@ -299,13 +269,15 @@ class MediaUpload(Resource):
 
         if uploaded_files:
             for uploaded_file in uploaded_files:
-                binary_image = uploaded_file.read()
-                encoded_image = base64.b64encode(binary_image).decode('utf-8')
-                uploaded_urls.append(encoded_image)
+                result = upload(uploaded_file.stream, folder=f"incident_reports/{incident_id}")
+                file_url = result.get('secure_url')
+                uploaded_urls.append(file_url)
 
-                new_media = MediaAttachment(file_url=encoded_image, incident_report_id=id)
+                new_media = MediaAttachment(file_url=file_url, incident_report_id=incident_id)
                 db.session.add(new_media)
-                db.session.commit()
+            
+        db.session.commit()
+
         return {
             'message': 'Files uploaded successfully',
             'uploaded_urls': uploaded_urls
@@ -313,14 +285,13 @@ class MediaUpload(Resource):
     
     @jwt_required()
     def get(self, id):
-        media_attachments = MediaAttachment.query.filter_by(incident_report_id=id).all()
+        media_attachments = MediaAttachment.query.filter_by(incident_id=id).all()
         return {
             'media_attachments': [{
                 'id': media_attachment.id,
                 'file_url': media_attachment.file_url
             } for media_attachment in media_attachments]
         }, 200
-
 
     # def post(self, incident_id):
     #     args = parser.parse_args()
@@ -354,7 +325,7 @@ api.add_resource(Login, '/login')
 api.add_resource(IncidentReportResource, '/incidents')
 api.add_resource(IncidentByID, '/incidents/<int:id>')
 api.add_resource(AllIncidents, '/all_incidents')
-api.add_resource(MediaUpload, '/incidents/media/<int:id>')
+api.add_resource(MediaUpload, '/incidents/<int:incident_id>/media')
 api.add_resource(Users, '/users')
 
 if __name__ == '__main__':
