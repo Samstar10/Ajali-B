@@ -97,7 +97,6 @@ class Login(Resource):
 class IncidentReportResource(Resource):
     @jwt_required()
     def post(self):
-        # data = request.get_json()
         data = request.form
         title = data.get('title')
         description = data.get('description')
@@ -292,6 +291,7 @@ class MediaUpload(Resource):
     @jwt_required()
     def post(self, id):
         uploaded_files = request.files.getlist('files')
+
         if not uploaded_files:
             return {'message': 'No files uploaded'}, 400
         
@@ -305,7 +305,9 @@ class MediaUpload(Resource):
 
                 new_media = MediaAttachment(file_url=encoded_image, incident_report_id=id)
                 db.session.add(new_media)
+
                 db.session.commit()
+
         return {
             'message': 'Files uploaded successfully',
             'uploaded_urls': uploaded_urls
