@@ -98,8 +98,8 @@ class Login(Resource):
 class IncidentReportResource(Resource):
     @jwt_required()
     def post(self):
-        # data = request.get_json()
-        data = request.form
+        data = request.get_json()
+        # data = request.form
         title = data.get('title')
         description = data.get('description')
         location = data.get('location')
